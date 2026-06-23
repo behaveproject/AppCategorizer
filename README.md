@@ -76,12 +76,6 @@ python -m playwright install chromium   # instead of: playwright install chromiu
 python -m appcategorizer Chrome         # instead of: appcategorizer Chrome
 ```
 
-You can also run the bundled launcher script directly, which needs no PATH setup:
-
-```bash
-python run_appcategorizer.py Chrome
-```
-
 ## Usage
 
 ### Local ML mode (default)
@@ -271,7 +265,7 @@ pip install -e ".[gui,localml]"   # GUI + on-device ML backend
 Run the sample desktop app:
 
 ```bash
-python3 run_appcategorizer_gui.py
+python -m appcategorizer.gui
 ```
 
 The GUI supports both backends. Use the Preferences panel to switch between
@@ -329,15 +323,16 @@ All source metadata is fetched from public third-party services and should be tr
 ## Project Layout
 
 ```text
-appcategorizer/__init__.py                     Public Python API
-appcategorizer/core.py                         Library orchestration class
-appcategorizer/cli.py                          Installable CLI entry point
-appcategorizer/engine/resolver.py              Source orchestration (local ML mode)
-appcategorizer/engine/embedding_classifier.py  Embedding-based category classifier
-appcategorizer/engine/llm_classifier.py        Remote LLM category classifier
-appcategorizer/engine/logger.py                Shared logger configuration
-appcategorizer/engine/sources/                 Metadata source implementations
-.env.example                                   API key template for LLM providers
+src/appcategorizer/__init__.py                     Public Python API
+src/appcategorizer/core.py                         Library orchestration class
+src/appcategorizer/cli.py                          Installable CLI entry point
+src/appcategorizer/gui.py                          Tkinter desktop GUI (python -m appcategorizer.gui)
+src/appcategorizer/engine/resolver.py              Source orchestration (local ML mode)
+src/appcategorizer/engine/embedding_classifier.py  Embedding-based category classifier
+src/appcategorizer/engine/llm_classifier.py        Remote LLM category classifier
+src/appcategorizer/engine/logger.py                Shared logger configuration
+src/appcategorizer/engine/sources/                 Metadata source implementations
+.env.example                                       API key template for LLM providers
 ```
 
 ## License

@@ -9,15 +9,22 @@ The application is a CLI app categorizer. It takes an application name and retur
 
 ## Project Structure
 
-- `appcategorizer/`: importable Python package.
-- `appcategorizer/cli.py`: CLI entry point, argument parsing, progress display, final result.
-- `appcategorizer/core.py`: library orchestration class (`Categorizer`), mode routing.
-- `appcategorizer/engine/resolver.py`: orchestrates all data sources asynchronously (local ML mode only).
-- `appcategorizer/engine/sources/`: one module per metadata source.
-- `appcategorizer/engine/sources/base.py`: shared relevance matching logic.
-- `appcategorizer/engine/embedding_classifier.py`: embedding model, category descriptions, similarity scoring.
-- `appcategorizer/engine/llm_classifier.py`: remote LLM classifier, provider configs, request formatting.
-- `appcategorizer/engine/logger.py`: shared logging configuration.
+The package uses a `src/` layout: the importable code lives under `src/appcategorizer/`, so tests and tools always run against the installed package rather than the working directory.
+
+- `src/appcategorizer/`: importable Python package.
+- `src/appcategorizer/cli.py`: CLI entry point, argument parsing, progress display, final result.
+- `src/appcategorizer/__main__.py`: enables `python -m appcategorizer`.
+- `src/appcategorizer/core.py`: library orchestration class (`Categorizer`), mode routing.
+- `src/appcategorizer/gui.py`: Tkinter desktop GUI; run with `python -m appcategorizer.gui` (requires the `[gui]` extra).
+- `src/appcategorizer/engine/resolver.py`: orchestrates all data sources asynchronously (local ML mode only).
+- `src/appcategorizer/engine/sources/`: one module per metadata source.
+- `src/appcategorizer/engine/sources/base.py`: shared relevance matching logic.
+- `src/appcategorizer/engine/embedding_classifier.py`: embedding model, category descriptions, similarity scoring.
+- `src/appcategorizer/engine/llm_classifier.py`: remote LLM classifier, provider configs, request formatting.
+- `src/appcategorizer/engine/logger.py`: shared logging configuration.
+- `tests/`: test suite (run with `pytest` after `pip install -e ".[dev]"`).
+- `.github/workflows/ci.yml`: CI running the tests on Python 3.10–3.12.
+- `pyproject.toml`: build configuration, dependencies, optional extras (`[dev]`, `[gui]`, `[localml]`), and the `appcategorizer` console script.
 - `.env.example`: API key template for LLM providers.
 
 ## Data Sources
@@ -662,6 +669,7 @@ Others
 
 ```
 appcategorizer [-h] [-v] [--mode {local_ml,cloud_llm}]
+               [--local-model MODEL]
                [--llm-provider PROVIDER] [--llm-model MODEL]
                [--api-key KEY] [--llm-base-url URL]
                app_name
@@ -672,6 +680,7 @@ appcategorizer [-h] [-v] [--mode {local_ml,cloud_llm}]
 | `app_name` | *(required)* | Application name to categorize |
 | `-v`, `--verbose` | `False` | Enable debug logs |
 | `--mode` | `local_ml` | Classification backend: `local_ml` or `cloud_llm` |
+| `--local-model` | `all-MiniLM-L6-v2` | Sentence-transformer model used in `local_ml` mode |
 | `--llm-provider` | `None` | LLM provider (required with `cloud_llm`) |
 | `--llm-model` | provider default | Model identifier |
 | `--api-key` | env / `.env` | API key for the LLM provider |
